@@ -2,6 +2,7 @@
 // (runtime-only or standalone) has been set in webpack.base.conf with an alias.
 
 import normalize from 'normalize.css';
+import bootstrap from 'bootstrap';
 import Vue from 'vue';
 import App from './App';
 import router from './router';
@@ -16,6 +17,7 @@ new Vue({
   el: '#app',
   router,
   normalize,
+  bootstrap,
   customComponents,
   // style,
   template: '<App/>',
