@@ -3,7 +3,8 @@ var utils = require('./utils')
 var config = require('../config')
 var vueLoaderConfig = require('./vue-loader.conf')
 
-function resolve (dir) {
+function resolve(dir) {
+  console.log(path.join(__dirname, '..', dir));
   return path.join(__dirname, '..', dir)
 }
 
@@ -77,7 +78,7 @@ module.exports = {
         }, {
           loader: "css-loader" // translates CSS into CommonJS
         }, {
-          loader: "sass-loader" // compiles Sass to CSS
+            loader: "sass-loader", // compiles Sass to CSS
         }]
       }
     ]

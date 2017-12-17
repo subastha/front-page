@@ -1,5 +1,11 @@
 import Vue from 'vue';
+import bModal from 'bootstrap-vue/es/components/modal/modal';
+import bModalDirective from 'bootstrap-vue/es/directives/modal/modal';
+import bCard from 'bootstrap-vue/es/components/card/card';
 
+Vue.component('b-card', bCard);
+Vue.component('b-modal', bModal);
+Vue.component('b-modal-directive', bModalDirective);
 Vue.component('title-name', {
   props: {
   },
