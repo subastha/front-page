@@ -26,7 +26,8 @@ module.exports = {
   'rules': {
     'no-console': ["error", {
       allow: ["warn", "error", "log"]
-    }]  ,
+    }],
+    'no-param-reassign': ["error", { "props": false }],
     // 'indent': [2, 'tab'],
     // "comma-dangle": ["error", "never"], //dangling comma
     "linebreak-style": 0, //to solve linebreak compilation error

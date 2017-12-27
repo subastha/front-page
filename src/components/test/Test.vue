@@ -14,7 +14,15 @@
 </template>
 <script>
 
+import HttpService from '../../core/services/http/HttpService';
 
-module.exports = {};
+export default {
+  created() {
+    HttpService.get('applications')
+      .then((response) => {
+        console.log(response);
+      });
+  },
+};
 </script>
 

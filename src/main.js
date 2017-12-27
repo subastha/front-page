@@ -7,6 +7,7 @@ import Vue from 'vue';
 // import Muuri from 'muuri';
 
 import BootstrapVue from 'bootstrap-vue';
+import store from './store';
 import App from './App';
 import router from './router';
 import customComponents from './components/components';
@@ -21,6 +22,7 @@ new Vue({
   el: '#app',
   router,
   normalize,
+  store,
   // bootstrap,
   BootstrapVue,
   customComponents,
