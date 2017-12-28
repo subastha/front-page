@@ -5,25 +5,10 @@
   </nav>
   <div class="content-container">
     <div class="sub-container web-tiles-container">
-      <div class="grid grid-web-tile">
-        <div class="item">
-          <div class="item-content">
-            <!-- Safe zone, enter your custom markup -->
-            This can be anything.
-            <!-- Safe zone ends -->
-          </div>
-        </div>
-        <div class="item">
-          <div class="item-content">
-            <!-- Safe zone, enter your custom markup -->
-            Two.
-            <!-- Safe zone ends -->
-          </div>
-        </div>
-      </div>
+      <Webtiles/>
     </div>
-    <div class="sub-container test-container">
-    </div>
+    <!-- <div class="sub-container test-container"> 
+    </div> -->
   </div>
   <footer>
 
@@ -31,26 +16,28 @@
 </div>
 </template>
 <script>
+// /* eslint-disable */
 
-import Muuri from 'muuri';
-import HttpService from '../../core/services/http/HttpService';
+// import Muuri from 'muuri';
+// import HttpService from '../../core/services/http/HttpService';
+import Webtiles from '../webtiles/Webtiles';
 
 export default {
+  components: {
+    Webtiles,
+  },
   data() {
     return {
 
     };
   },
-  computed() {
-
-  },
   methods: {
     login: (event) => {
-      HttpService.get('webtiles', {
-        params: {
-          name: 'who?',
-        },
-      });
+      // HttpService.get('webtiles', {
+      //   params: {
+      //     name: 'who?',
+      //   },
+      // });
       // console.log(this.token);
       console.log(event);
     },
@@ -65,11 +52,11 @@ export default {
   //   },
   // },
   mounted() {
-    this.$nextTick(() => {
-      // console.log('here');
-      const grid = new Muuri('.grid-web-tile');
-      console.log(grid);
-    });
+    // this.$nextTick(() => {
+    //   // console.log('here');
+    //   const grid = new Muuri('.grid-web-tile');
+    //   console.log(grid);
+    // });
     // const grid = new Muuri('.grid');
     // console.log(grid);
   },
