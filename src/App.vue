@@ -6,14 +6,16 @@
 
 <script>
 import 'bootstrap/dist/css/bootstrap.css';
-import 'bootstrap-vue/dist/bootstrap-vue.css';
+// import 'bootstrap-vue/dist/bootstrap-vue.css';
 
 export default {
   name: 'app',
 };
 </script>
 
-<style>
+<style lang="scss">
   @import 'App.scss';
   @import './components/components.scss';
+
+
 </style>
