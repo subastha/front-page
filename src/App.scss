@@ -1,3 +1,15 @@
+// @import './assets/css/roboto.css';
+// @import './assets/css/material_icons.css';
+
+@import "~vue-material/src/theme/engine"; 
+
+@include md-register-theme("default", (
+  primary: md-get-palette-color(blue, A200), 
+  accent: md-get-palette-color(red, 500) 
+));
+
+@import "~vue-material/src/theme/all"; 
+
 html, body, #app {
   width: 100%;
   height: 100%;
@@ -7,4 +19,16 @@ html, body, #app {
   font-family: 'Avenir', Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+.md-primary {
+  color: red;
+}
+
+.md-accent {
+  color: green;
+}
+
+.md-transparent {
+  color: #ccc;
 }

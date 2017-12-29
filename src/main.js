@@ -6,14 +6,20 @@ import normalize from 'normalize.css';
 import Vue from 'vue';
 // import Muuri from 'muuri';
 
-import BootstrapVue from 'bootstrap-vue';
+// import BootstrapVue from 'bootstrap-vue';
+import { MdButton, MdField } from 'vue-material/dist/components';
+import 'vue-material/dist/vue-material.css';
+
 import store from './store';
 import App from './App';
 import router from './router';
 import customComponents from './components/components';
 // import style from './style';
 
-Vue.use(BootstrapVue);
+// Vue.use(BootstrapVue);
+Vue.use(MdButton);
+Vue.use(MdField);
+
 Vue.config.productionTip = false;
 
 
@@ -24,7 +30,9 @@ new Vue({
   normalize,
   store,
   // bootstrap,
-  BootstrapVue,
+  MdButton,
+  MdField,
+  // BootstrapVue,
   customComponents,
   // Muuri,
   // style,
