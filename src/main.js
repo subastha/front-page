@@ -4,6 +4,7 @@
 import normalize from 'normalize.css';
 // import bootstrap from 'bootstrap';
 import Vue from 'vue';
+import Vuelidate from 'vuelidate';
 // import Muuri from 'muuri';
 
 // import BootstrapVue from 'bootstrap-vue';
@@ -19,9 +20,9 @@ import customComponents from './components/components';
 // Vue.use(BootstrapVue);
 Vue.use(MdButton);
 Vue.use(MdField);
+Vue.use(Vuelidate);
 
 Vue.config.productionTip = false;
-
 
 /* eslint-disable no-new */
 new Vue({

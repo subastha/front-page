@@ -27,8 +27,14 @@
     width: 300px;
 
     .login-button-container {
-      margin: 10px -8px 0 0;
+      margin: 16px -8px 0 0;
       float: right;
+    }
+
+    .custom-md-error {
+      opacity: 1;
+      bottom: -30px;
+      color: $errorColor;
     }
   }
 }
