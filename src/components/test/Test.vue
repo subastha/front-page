@@ -18,7 +18,7 @@ import HttpService from '../../core/services/http/HttpService';
 
 export default {
   created() {
-    HttpService.get('applications')
+    HttpService.get('test')
       .then((response) => {
         console.log(response);
       });

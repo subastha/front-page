@@ -9,10 +9,11 @@ const getters = {
 
 const mutations = {
   token(currentState, token) {
-    currentState.user.token = token;
+    currentState.token = token;
+    localStorage.setItem('token', token);
   },
   loggedIn(currentState, status) {
-    currentState.user.isLoggedIn = status;
+    currentState.isLoggedIn = status;
   },
 };
 

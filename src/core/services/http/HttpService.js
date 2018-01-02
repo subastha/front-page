@@ -3,14 +3,12 @@ import HttpBaseService from './HttpBaseService';
 
 export default {
   get(url, param) {
-    return HttpBaseService.get(url, {
+    return HttpBaseService.create().get(url, {
       params: param,
     });
   },
   post(url, param) {
-    return HttpBaseService.post(url, {
-      params: param,
-    });
+    return HttpBaseService.create().post(url, param);
   },
   put() {
 

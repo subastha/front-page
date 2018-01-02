@@ -6,11 +6,19 @@ import Login from '@/components/login/Login';
 
 Vue.use(Router);
 
-export default new Router({
+const router = new Router({
   routes: [
     {
-      path: '/',
+      path: '/base',
       name: 'Base',
+      component: Base,
+      // beforeEnter: (to, from, next) => {
+      //   // ...
+      // }
+    },
+    {
+      path: '/',
+      name: 'Root',
       component: Base,
     },
     {
@@ -25,3 +33,10 @@ export default new Router({
     },
   ],
 });
+
+// https://router.vuejs.org/en/advanced/navigation-guards.html
+// router.afterEach((to, from) => {
+//   // ...
+// })
+
+export default router;
