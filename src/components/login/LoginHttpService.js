@@ -9,6 +9,7 @@ export default {
           console.log(store);
           store.commit('token', response.data.token);
           store.commit('loggedIn', true);
+          store.commit('applications', response.data.applications);
           resolve(response.data);
         }, error => reject(error));
         // todo: create error type in PHP and when you get AUTH_ERROR do re auth logic

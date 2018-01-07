@@ -1,3 +1,5 @@
+import applicationFactory from './applicationFactory';
+
 const state = {
   applications: [],
 };
@@ -8,7 +10,8 @@ const getters = {
 
 const mutations = {
   applications(currentState, applications) {
-    currentState.applications = applications;
+    currentState.applications = applications.map(app => applicationFactory.create(app));
+    console.log(currentState.applications);
     // applications.forEach((application) => {
     //   const index = currentState.applications.findIndex(app => app.id === application.id);
     //   if (index === -1) {
