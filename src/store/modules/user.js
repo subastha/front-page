@@ -1,16 +1,26 @@
+import userFactory from './userFactory';
+
 const state = {
-  token: '',
+  user: null,
   isLoggedIn: false,
 };
 
 const getters = {
-  token: currentState => currentState.token || localStorage.getItem('token'),
+  token: currentState => (currentState.isLoggedIn
+    ? currentState.user.token || localStorage.getItem('token')
+    : ''),
 };
 
 const mutations = {
   token(currentState, token) {
-    currentState.token = token;
+    currentState.user.token = token;
+    currentState.isLoggedIn = true;
     localStorage.setItem('token', token);
+  },
+  user(currentState, user) {
+    currentState.user = userFactory.create(user);
+    console.log(currentState.user);
+    currentState.isLoggedIn = true;
   },
   loggedIn(currentState, status) {
     currentState.isLoggedIn = status;

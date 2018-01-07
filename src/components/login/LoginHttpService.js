@@ -7,8 +7,7 @@ export default {
       HttpService.post('signin', params)
         .then((response) => {
           console.log(store);
-          store.commit('token', response.data.token);
-          store.commit('loggedIn', true);
+          store.commit('user', response.data.user);
           store.commit('applications', response.data.applications);
           resolve(response.data);
         }, error => reject(error));
