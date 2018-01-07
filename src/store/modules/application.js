@@ -8,12 +8,13 @@ const getters = {
 
 const mutations = {
   applications(currentState, applications) {
-    applications.forEach((application) => {
-      const index = currentState.applications.findIndex(app => app.id === application.id);
-      if (index === -1) {
-        currentState.applications.push(application);
-      }
-    });
+    currentState.applications = applications;
+    // applications.forEach((application) => {
+    //   const index = currentState.applications.findIndex(app => app.id === application.id);
+    //   if (index === -1) {
+    //     currentState.applications.push(application);
+    //   }
+    // });
   },
 };
 

@@ -1,8 +1,8 @@
 <template>
-<div class="grid grid-web-tile">
+<div id="grid-web-tile" class="grid grid-web-tile">
   <div v-for="tile in webtiles"
     @click="navigate(tile.url)"
-     class="item">
+     class="item-webtile">
     <div class="item-content">
       <!-- Safe zone, enter your custom markup -->
       {{tile.name}}
@@ -14,7 +14,8 @@
 
 <script>
 import Muuri from 'muuri';
-import HttpService from '../../core/services/http/HttpService';
+import WebtilesHttpService from './WebtilesHttpService';
+// import { HttpErrorHandler } from '../../core/services/common/handlers';
 
 export default {
   data() {
@@ -25,6 +26,16 @@ export default {
   computed: {
   },
   methods: {
+    renderWebtiles: () => {
+      const webtileElement = document.getElementById('grid-web-tile');
+      const options = {
+        // items: webtileElement.querySelectorAll('.item-webtile'),
+      };
+
+      // const grid = new Muuri('#grid-web-tile', options);
+      const grid = new Muuri(webtileElement, options);
+      console.log(grid);
+    },
     navigate: (url) => {
       window.open(url, '_blank');
     },
@@ -33,13 +44,14 @@ export default {
 
   },
   mounted() {
-    HttpService.get('webtiles')
+    WebtilesHttpService.getWebtiles()
       .then((response) => {
         console.log(response);
         this.webtiles = response.data.webtiles;
+
+        // wait until all UI elements are created before creating grid
         this.$nextTick(() => {
-          const grid = new Muuri('.grid-web-tile');
-          console.log(grid);
+          this.renderWebtiles();
         });
       });
   },

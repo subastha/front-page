@@ -1,7 +1,7 @@
 <template>
 <div class="root">
   <nav>
-    <button v-on:click='login'>Click me</button>
+    <h2>My Homepage</h2>
   </nav>
   <div class="content-container">
     <div class="sub-container web-tiles-container">

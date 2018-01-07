@@ -2,7 +2,7 @@
   position: relative;
 }
 
-.item {
+.item-webtile {
   display: block;
   position: absolute;
   width: 150px;
@@ -13,13 +13,13 @@
   border-radius: 5px;
   padding: 5px;
 }
-.item.muuri-item-dragging {
+.item-webtile.muuri-item-dragging {
   z-index: 3;
 }
-.item.muuri-item-releasing {
+.item-webtile.muuri-item-releasing {
   z-index: 2;
 }
-.item.muuri-item-hidden {
+.item-webtile.muuri-item-hidden {
   z-index: 0;
 }
 .item-content {
