@@ -4,19 +4,19 @@
 import normalize from 'normalize.css';
 // import bootstrap from 'bootstrap';
 import Vue from 'vue';
+import Router from 'vue-router';
 import Vuelidate from 'vuelidate';
-// import Muuri from 'muuri';
 
 // import BootstrapVue from 'bootstrap-vue';
 import { MdButton, MdField } from 'vue-material/dist/components';
 import 'vue-material/dist/vue-material.css';
+import router from './router';
 
 import store from './store';
 import App from './App';
-import router from './router';
 import customComponents from './components/components';
-// import style from './style';
 
+Vue.use(Router);
 // Vue.use(BootstrapVue);
 Vue.use(MdButton);
 Vue.use(MdField);

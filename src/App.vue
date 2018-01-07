@@ -8,6 +8,7 @@
 import 'bootstrap/dist/css/bootstrap.css';
 // import 'bootstrap-vue/dist/bootstrap-vue.css';
 import AuthService from './core/services/common/AuthService';
+import { HttpErrorHandler } from './core/services/common/handlers';
 
 export default {
   name: 'app',
@@ -16,10 +17,7 @@ export default {
       .then((response) => {
         console.log('valid', response);
         // this.$router.push('Base');
-      }, (error) => {
-        this.$router.push('Login');
-        console.log('not valid', error.response);
-      });
+      }, HttpErrorHandler.bind(this));
     console.log('beforeCreate App');
   },
 };
