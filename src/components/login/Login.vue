@@ -28,7 +28,9 @@
 <script>
 import { validationMixin } from 'vuelidate';
 import { required, email } from 'vuelidate/lib/validators';
-import { commonErrorHandler } from '../../core/services/common/handlers';
+import { mapMutations, mapGetters } from 'vuex';
+import AuthService from '@/core/services/common/AuthService';
+import { commonErrorHandler, HttpErrorHandler } from '../../core/services/common/handlers';
 import LoginHttpService from './LoginHttpService';
 
 export default {
@@ -60,6 +62,12 @@ export default {
   computed: {
   },
   methods: {
+    ...mapMutations([
+      'isLoggedIn',
+    ]),
+    ...mapGetters([
+      'isLoggedIn',
+    ]),
     login(event) {
       if (this.validateForm()) {
         console.log('success', this.other, this.form, event);
@@ -86,6 +94,20 @@ export default {
 
       return false;
     },
+  },
+  beforeMount() {
+    if (this.isLoggedIn()) {
+      AuthService
+        .validateToken()
+        .then((response) => {
+          console.log(response);
+          // this.isLoggedIn(true);
+          this.$router.push('Base');
+        },
+        HttpErrorHandler.bind(this));
+    }
+
+    console.log('beforeMount Login');
   },
 };
 </script>

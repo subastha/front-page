@@ -2,13 +2,14 @@ import userFactory from './userFactory';
 
 const state = {
   user: null,
-  isLoggedIn: false,
+  isLoggedIn: localStorage.getItem('isLoggedIn') || false,
 };
 
 const getters = {
   token: currentState => (currentState.isLoggedIn
-    ? currentState.user.token || localStorage.getItem('token')
-    : ''),
+    ? localStorage.getItem('token') || (currentState.user ? currentState.user.token : null)
+    : localStorage.getItem('token')),
+  isLoggedIn: currentState => currentState.isLoggedIn,
 };
 
 const mutations = {
@@ -20,10 +21,11 @@ const mutations = {
   user(currentState, user) {
     currentState.user = userFactory.create(user);
     console.log(currentState.user);
-    currentState.isLoggedIn = true;
+    localStorage.setItem('token', user.token);
   },
-  loggedIn(currentState, status) {
+  isLoggedIn(currentState, status) {
     currentState.isLoggedIn = status;
+    localStorage.setItem('isLoggedIn', status);
   },
 };
 

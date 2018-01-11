@@ -20,6 +20,8 @@
 
 // import Muuri from 'muuri';
 // import HttpService from '../../core/services/http/HttpService';
+import AuthService from '@/core/services/common/AuthService';
+import { HttpErrorHandler } from '@/core/services/common/handlers';
 import Webtiles from '../webtiles/Webtiles';
 
 export default {
@@ -59,6 +61,14 @@ export default {
     // });
     // const grid = new Muuri('.grid');
     // console.log(grid);
+  },
+  beforeCreate() {
+    AuthService.validateToken()
+      .then((response) => {
+        console.log('valid', response);
+      },
+      HttpErrorHandler.bind(this));
+    console.log('beforeCreate Base');
   },
 };
 </script>

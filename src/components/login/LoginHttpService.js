@@ -6,8 +6,9 @@ export default {
     return new Promise(((resolve, reject) => {
       HttpService.post('signin', params)
         .then((response) => {
-          console.log(store);
+          console.log('store', store);
           store.commit('user', response.data.user);
+          store.commit('isLoggedIn', true);
           store.commit('applications', response.data.applications);
           resolve(response.data);
         }, error => reject(error));

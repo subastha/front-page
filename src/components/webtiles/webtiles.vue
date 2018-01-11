@@ -15,7 +15,7 @@
 <script>
 import Muuri from 'muuri';
 import WebtilesHttpService from './WebtilesHttpService';
-// import { HttpErrorHandler } from '../../core/services/common/handlers';
+import { commonErrorHandler } from '../../core/services/common/handlers';
 
 export default {
   data() {
@@ -53,7 +53,7 @@ export default {
         this.$nextTick(() => {
           this.renderWebtiles();
         });
-      });
+      }, commonErrorHandler);
   },
 };
 </script>

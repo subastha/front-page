@@ -2,9 +2,7 @@ import Router from 'vue-router';
 import Base from '@/components/base/Base';
 import Test from '@/components/test/Test';
 import Login from '@/components/login/Login';
-
-// store router guards in applications store
-// after every route make at least one api call that needs authorization
+// import store from '@/store';
 
 const router = new Router({
   routes: [
@@ -41,17 +39,14 @@ const router = new Router({
 
 router.beforeEach((to, from, next) => {
   console.log('to from', to, from);
-  // check if its default route
-  // yes - let through
-  // no - check applications store
   switch (to.name) {
-    case 'Login': next();
-      break;
+    case 'Login':
+    case 'Base':
+    case 'Root':
     case 'Test': next();
       break;
     default: router.push(Login);
       break;
-
   }
 });
 
