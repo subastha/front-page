@@ -11,10 +11,10 @@ export default {
   post(url, param) {
     return HttpBaseService.create().post(url, param);
   },
-  put() {
-
+  put(url, param) {
+    return HttpBaseService.create().put(url, param);
   },
-  delete() {
-
+  delete(url, param) {
+    return HttpBaseService.create().delete(url, param);
   },
 };

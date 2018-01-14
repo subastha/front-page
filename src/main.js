@@ -8,7 +8,10 @@ import Router from 'vue-router';
 import Vuelidate from 'vuelidate';
 
 // import BootstrapVue from 'bootstrap-vue';
-import { MdButton, MdField } from 'vue-material/dist/components';
+import 'vue-awesome/icons';
+import Icon from 'vue-awesome/components/Icon';
+import { MdButton, MdField, MdDialog, MdDialogConfirm }
+  from 'vue-material/dist/components';
 import 'vue-material/dist/vue-material.css';
 import router from './router';
 
@@ -20,8 +23,10 @@ Vue.use(Router);
 // Vue.use(BootstrapVue);
 Vue.use(MdButton);
 Vue.use(MdField);
+Vue.use(MdDialog);
+Vue.use(MdDialogConfirm);
 Vue.use(Vuelidate);
-
+Vue.component('icon', Icon);
 Vue.config.productionTip = false;
 
 /* eslint-disable no-new */
@@ -33,6 +38,8 @@ new Vue({
   // bootstrap,
   MdButton,
   MdField,
+  MdDialog,
+  MdDialogConfirm,
   // BootstrapVue,
   customComponents,
   // Muuri,

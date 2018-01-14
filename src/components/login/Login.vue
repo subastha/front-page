@@ -5,7 +5,7 @@
   </div>
   <div class='login-container'>
     <form novalidate class='login-form-container' @submit.prevent>
-      <md-field class='custom-md-field '>
+      <md-field class='custom-md-field'>
         <label> email</label>
         <md-input v-model='form.email' name="email" type="text"></md-input>
         <span class="md-error custom-md-error" v-if="showErrors && !$v.form.email.required">Email is required.</span>
@@ -84,7 +84,6 @@ export default {
       }
     },
     validateForm() {
-      console.log('$v', this.$v);
       this.showErrors = true;
       this.$v.$touch();
 

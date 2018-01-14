@@ -1,8 +1,8 @@
 <template>
 <div class="root">
-  <nav>
-    <h2>My Homepage</h2>
-  </nav>
+  <div class="title-bar">
+      <h2>My Homepage</h2>
+  </div>
   <div class="content-container">
     <div class="sub-container web-tiles-container">
       <Webtiles/>
@@ -22,7 +22,7 @@
 // import HttpService from '../../core/services/http/HttpService';
 import AuthService from '@/core/services/common/AuthService';
 import { HttpErrorHandler } from '@/core/services/common/handlers';
-import Webtiles from '../webtiles/Webtiles';
+import Webtiles from '@/components/webtiles/Webtiles';
 
 export default {
   components: {

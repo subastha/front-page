@@ -1,29 +1,145 @@
 <template>
-<div id="grid-web-tile" class="grid grid-web-tile">
-  <div v-for="tile in webtiles"
-    @click="navigate(tile.url)"
-     class="item-webtile">
-    <div class="item-content">
-      <!-- Safe zone, enter your custom markup -->
-      {{tile.name}}
-      <!-- Safe zone ends -->
+<div class="webtile-wrapper">
+  <div id="grid-web-tile" class="grid grid-web-tile">
+    <div v-for="tile in webtiles"
+      @click="editMode ? editWebtile(tile) : navigate(tile.url)"
+      class="item-webtile">
+      <div class="item-content">
+        <!-- Safe zone, enter your custom markup -->
+        {{tile.name}}
+        <div v-if="editMode" class="webtile-button-wrapper">
+          <a href="#" @click="deleteTile($event, tile)">
+              <icon name="trash" scale="1.25"></icon>
+          </a>
+        </div>
+        <!-- Safe zone ends -->
+      </div>
+    </div>
+    <div @click="openAddModal" class="item-webtile">
+      <div class="item-content">
+        <p>Add Webtile</p>
+        
+      </div>
     </div>
   </div>
+  <div  class="webtile-edit-wrapper">
+    <a v-if="!editMode" href="#" @click="toggleEditMode"><icon name="cog" scale="1.5"></icon></a>
+    <a v-if="editMode" href="#" @click="toggleEditMode"><icon name="window-close" scale="1.5"></icon></a>
+  </div>
+
+  <!-- Add Modal -->
+  <material-modal v-bind:show-modal="displayModal" 
+    @closemodal="displayModal = false"
+    @savemodal="modalSaveHandler">
+    <template slot="header">{{modalHeader}}</template>
+    <template slot="content">
+
+      <form novalidate class='add-webtile-form-container' @submit.prevent>
+        <md-field class='custom-md-field'>
+          <label> name</label>
+          <md-input v-model='form.name' name="name" type="text"></md-input>
+          <span class="md-error custom-md-error" v-if="showErrors && !$v.form.name.required">Name is required.</span>
+        </md-field>
+        <md-field class='custom-md-field '>
+          <label>url</label>
+          <md-input v-model='form.url' name="url" type="text"></md-input>
+          <span class="md-error custom-md-error" v-if="showErrors && !$v.form.url.required">Url is required.</span>
+        </md-field>
+        <md-field class='custom-md-field '>
+          <label> image url</label>
+          <md-input v-model='form.imageUrl' name="imageUrl" type="text"></md-input>
+        </md-field>
+      </form>
+    </template>
+  </material-modal>
+
+  <!-- Edit Modal -->
+  <material-modal v-bind:show-modal="displayEditModal" 
+    @closemodal="modalEditCloseHandler"
+    @savemodal="modalEditSaveHandler">
+    <template slot="header">{{modalHeader}}</template>
+    <template slot="content">
+
+      <form novalidate class='add-webtile-form-container' @submit.prevent>
+        <md-field class='custom-md-field'>
+          <label> name</label>
+          <md-input v-model='currentWebtile.name' name="name" type="text"></md-input>
+          <span class="md-error custom-md-error" v-if="showErrors && !$v.form.name.required">Name is required.</span>
+        </md-field>
+        <md-field class='custom-md-field '>
+          <label>url</label>
+          <md-input v-model='currentWebtile.url' name="url" type="text"></md-input>
+          <span class="md-error custom-md-error" v-if="showErrors && !$v.form.url.required">Url is required.</span>
+        </md-field>
+        <md-field class='custom-md-field '>
+          <label> image url</label>
+          <md-input v-model='currentWebtile.imageUrl' name="imageUrl" type="text"></md-input>
+        </md-field>
+      </form>
+    </template>
+  </material-modal>
+  <md-dialog-confirm
+      :md-active.sync="confirmModal.active"
+      :md-title="confirmModal.title"
+      :md-content="confirmModal.content"
+      :md-confirm-text="confirmModal.confirmText"
+      :md-cancel-text="confirmModal.cancelText"
+      @md-cancel="onConfirmModalCancel"
+      @md-confirm="onConfirmModalConfirm" />
 </div>
 </template>
 
 <script>
+import { validationMixin } from 'vuelidate';
+import { required } from 'vuelidate/lib/validators';
 import Muuri from 'muuri';
+import MaterialModal from '@/core/components/MaterialModal/MaterialModal';
+import { validateLink } from '@/core/services/common/Utility';
 import WebtilesHttpService from './WebtilesHttpService';
+import { webtileFactory } from './webtileFactory';
 import { commonErrorHandler } from '../../core/services/common/handlers';
 
+
 export default {
-  data() {
-    return {
-      webtiles: [],
-    };
+  mixins: [validationMixin],
+  components: {
+    MaterialModal,
   },
   computed: {
+  },
+  data() {
+    return {
+      editMode: false,
+      currentWebtile: {},
+      showErrors: false,
+      webtiles: [],
+      displayModal: false,
+      displayEditModal: false,
+      modalHeader: '',
+      form: {
+        name: '',
+        url: '',
+        imageUrl: '',
+      },
+      confirmModal: {
+        active: false,
+        title: '',
+        content: '',
+        confirmText: 'OK',
+        cancelText: 'Cancel',
+      },
+    };
+  },
+  validation: {
+    form: {
+      name: {
+        required,
+      },
+      url: {
+        required,
+      },
+      imageUrl: {},
+    },
   },
   methods: {
     renderWebtiles: () => {
@@ -36,8 +152,105 @@ export default {
       const grid = new Muuri(webtileElement, options);
       console.log(grid);
     },
-    navigate: (url) => {
-      window.open(url, '_blank');
+    toggleEditMode() {
+      console.log(this.editMode);
+      this.editMode = !this.editMode;
+      this.renderWebtiles();
+    },
+    navigate(url) {
+      console.log(url);
+      window.open(validateLink(url), '_blank');
+    },
+    validateForm() {
+      this.showErrors = true;
+      this.$v.$touch();
+
+      if (!this.$v.$invalid) {
+        return true;
+      }
+
+      return false;
+    },
+    openAddModal() {
+      console.log('displayModal', this.displayModal);
+      this.modalHeader = 'Add Webtile';
+      this.displayModal = true;
+    },
+    closeAddModal() {
+      this.displayModal = false;
+    },
+    modalSaveHandler(data) {
+      // if (this.validateForm()) {
+      console.log(this.form);
+      console.log(data);
+      webtileFactory.generate(this.form)
+        .then((webtile) => {
+          this.webtiles.push(webtile);
+          this.$nextTick(() => {
+            this.renderWebtiles();
+          });
+          this.closeAddModal();
+        });
+      // }
+    },
+    onConfirmModalCancel() {
+      this.confirmModal.active = false;
+    },
+    onConfirmModalConfirm() {
+      this.currentWebtile.delete()
+        .then(() => {
+          this.webtiles.splice(
+            this.webtiles.findIndex(
+              webtile => webtile.id === this.currentWebtile.id,
+            ),
+            1,
+          );
+          this.currentWebtile = {};
+          this.$nextTick(() => {
+            this.renderWebtiles();
+          });
+        });
+    },
+    activateDeleteConfirmModal(webtile) {
+      console.log('current webtile: ', this.currentWebtile);
+      this.confirmModal.active = true;
+      this.confirmModal.content = `Delete webtile ${webtile.name}?`;
+    },
+    deleteTile(event, webtile) {
+      event.stopPropagation();
+      console.log(webtile);
+      this.currentWebtile = webtile;
+      this.activateDeleteConfirmModal(webtile);
+    },
+    editWebtile(webtile) {
+      this.modalHeader = 'Edit Webtile';
+      this.currentWebtile = webtileFactory.create(webtile);
+      this.displayEditModal = true;
+      console.log(webtile);
+    },
+    modalEditSaveHandler() {
+      // update
+      this.currentWebtile.update()
+        .then((response) => {
+          // swap out
+          const index = this.webtiles.findIndex(
+            webtile => webtile.id === this.currentWebtile.id,
+          );
+          if (index !== -1) {
+            this.webtiles[index] = webtileFactory.create(response.data.webtile);
+          }
+
+          this.displayEditModal = false;
+          this.currentWebtile = {};
+          this.$nextTick(() => {
+            this.renderWebtiles();
+          });
+        });
+      console.log(this.currentWebtile);
+    },
+    modalEditCloseHandler() {
+      this.displayEditModal = false;
+      this.currentWebtile = {};
     },
   },
   created() {
@@ -47,7 +260,7 @@ export default {
     WebtilesHttpService.getWebtiles()
       .then((response) => {
         console.log(response);
-        this.webtiles = response.data.webtiles;
+        this.webtiles = response.data.webtiles.map(webtileFactory.create);
 
         // wait until all UI elements are created before creating grid
         this.$nextTick(() => {
