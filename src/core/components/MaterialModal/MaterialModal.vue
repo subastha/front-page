@@ -1,5 +1,5 @@
 <template>
-  <md-dialog :md-active.sync="showModal" :md-backdrop="true">
+  <md-dialog :md-active.sync="showModal" @md-closed="$emit('closemodal')">
     <md-dialog-title><slot name="header"></slot></md-dialog-title>
     <md-dialog-content>
     <slot name="content"></slot>
@@ -17,12 +17,16 @@ export default {
     showModal: {
       type: Boolean,
       required: true,
+      default: false,
     },
     hasSave: {
       type: Boolean,
       required: false,
       default: true,
     },
+  },
+  computed: {
+    show: () => this.showModal,
   },
   data() {
     return {

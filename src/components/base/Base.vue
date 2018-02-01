@@ -5,7 +5,7 @@
   </div>
   <div class="content-container">
     <div class="sub-container web-tiles-container">
-      <Webtiles/>
+      <Webtiles v-if="isAuthenticated"/>
     </div>
     <!-- <div class="sub-container test-container"> 
     </div> -->
@@ -30,7 +30,7 @@ export default {
   },
   data() {
     return {
-
+      isAuthenticated: false,
     };
   },
   methods: {
@@ -65,6 +65,7 @@ export default {
   beforeCreate() {
     AuthService.validateToken()
       .then((response) => {
+        this.isAuthenticated = true;
         console.log('valid', response);
       },
       HttpErrorHandler.bind(this));

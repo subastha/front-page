@@ -38,7 +38,7 @@ const router = new Router({
 });
 
 router.beforeEach((to, from, next) => {
-  console.log('to from', to, from);
+  // console.log('to from', to, from);
   switch (to.name) {
     case 'Login':
     case 'Base':

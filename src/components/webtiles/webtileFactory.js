@@ -7,6 +7,7 @@ function create(webtile) {
   let name = webtile.name;
   let url = webtile.url;
   let imageUrl = webtile.image_url;
+  let order = webtile.order;
 
   const obj = {};
 
@@ -43,6 +44,14 @@ function create(webtile) {
         imageUrl = value;
       },
     },
+    order: {
+      configurable: false,
+      enumerable: true,
+      get: () => order,
+      set: (value) => {
+        order = value;
+      },
+    },
   });
 
 // eslint-disable-next-line
@@ -57,6 +66,7 @@ function create(webtile) {
       name: this.name,
       url: this.url,
       imageUrl: this.imageUrl,
+      order: this.order,
     });
   };
   return obj;

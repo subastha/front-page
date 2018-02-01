@@ -2,35 +2,48 @@
 <div class="webtile-wrapper">
   <div id="grid-web-tile" class="grid grid-web-tile">
     <div v-for="tile in webtiles"
-      @click="editMode ? editWebtile(tile) : navigate(tile.url)"
-      class="item-webtile">
+      @click="editMode ? function(){} : navigate(tile.url)"
+      class="item-webtile"
+      :class="{'move-pointer':editMode, 'link-pointer':!editMode}"
+      :data-order="tile.order"
+      :data-id="tile.id">
       <div class="item-content">
         <!-- Safe zone, enter your custom markup -->
-        {{tile.name}}
+  
+       <img v-if="tile.imageUrl"  :src="tile.imageUrl" class="absolute-center logo" :alt="tile.name"/>
+        {{tile.imageUrl ? "" : tile.name}}
         <div v-if="editMode" class="webtile-button-wrapper">
-          <a href="#" @click="deleteTile($event, tile)">
+          <a href="#" @click.stop="editWebtile(tile)">
+            <icon name="cog" scale="1.25"></icon>
+            </a>
+        
+          <a href="#" @click.stop="deleteTile($event, tile)">
               <icon name="trash" scale="1.25"></icon>
           </a>
         </div>
+        <md-tooltip v-if="tile.imageUrl" 
+          md-direction="top" md-delay="400">
+          {{tile.name}}
+        </md-tooltip>
         <!-- Safe zone ends -->
       </div>
     </div>
-    <div @click="openAddModal" class="item-webtile">
-      <div class="item-content">
-        <p>Add Webtile</p>
-        
-      </div>
-    </div>
   </div>
+
+  <md-button v-if="editMode" @click="openAddModal" class="md-icon-button md-raised md-primary btn-add-webtile">
+    <md-icon>add</md-icon>
+  </md-button>
+
   <div  class="webtile-edit-wrapper">
     <a v-if="!editMode" href="#" @click="toggleEditMode"><icon name="cog" scale="1.5"></icon></a>
     <a v-if="editMode" href="#" @click="toggleEditMode"><icon name="window-close" scale="1.5"></icon></a>
   </div>
 
   <!-- Add Modal -->
-  <material-modal v-bind:show-modal="displayModal" 
-    @closemodal="displayModal = false"
-    @savemodal="modalSaveHandler">
+  <material-modal v-bind:show-modal="displayAddModal" 
+    @closemodal="displayAddModal = false"
+    @savemodal="modalSaveHandler"
+    @md-closed="displayAddModal = false">
     <template slot="header">{{modalHeader}}</template>
     <template slot="content">
 
@@ -90,6 +103,7 @@
 </template>
 
 <script>
+/* eslint-disable */
 import { validationMixin } from 'vuelidate';
 import { required } from 'vuelidate/lib/validators';
 import Muuri from 'muuri';
@@ -109,12 +123,14 @@ export default {
   },
   data() {
     return {
+      grid: null,
       editMode: false,
       currentWebtile: {},
       showErrors: false,
       webtiles: [],
-      displayModal: false,
+      displayAddModal: false,
       displayEditModal: false,
+      isOrderDirty: false,
       modalHeader: '',
       form: {
         name: '',
@@ -142,20 +158,75 @@ export default {
     },
   },
   methods: {
-    renderWebtiles: () => {
+    renderWebtiles(gridOptions) {
       const webtileElement = document.getElementById('grid-web-tile');
-      const options = {
-        // items: webtileElement.querySelectorAll('.item-webtile'),
+      const defaultOptions = {
+        sortData: {
+            // order: item => parseInt(element.getAttribute('data-order'), 10),
+            order: function (item, element) {
+              return parseInt(element.getAttribute('data-order'), 10);
+            },
+          },
       };
 
+      if(window.grid) {
+        window.grid.destroy();
+        window.grid = null;
+      }
       // const grid = new Muuri('#grid-web-tile', options);
-      const grid = new Muuri(webtileElement, options);
-      console.log(grid);
+      window.grid = new Muuri(webtileElement, Object.assign({}, defaultOptions, gridOptions));
+      // const webtiles = this.webtiles;
+      window.grid.on('dragReleaseEnd', function(gridItem) {
+        this.isOrderDirty = true;
+        console.log('dragReleaseEnd', window.grid.getItems());
+        window.grid.getItems().forEach(function(item, index) {
+          const webtile = this.webtiles.find(
+            tile => tile.id == parseInt(item.getElement().getAttribute('data-id'), 10)
+          );
+
+          webtile.order = index + 1;
+        }, this);
+        console.log('after drag release', this.webtiles);
+      }.bind(this));
+      // this.$nextTick(() => {
+      //   window.grid.refreshSortData();
+      //   window.grid.sort('order');
+      // });
+      
+      // console.log('this.webtiles', this.webtiles);
     },
     toggleEditMode() {
       console.log(this.editMode);
       this.editMode = !this.editMode;
-      this.renderWebtiles();
+
+      let options = {};
+      if (this.editMode) {
+        options = {
+          dragEnabled: true,
+        };
+        this.renderWebtiles(options);
+      } else {
+        this.saveWebtileOrder();
+      }
+      // if(!this.editMode){
+      //   window.grid.refreshSortData();
+      //   window.grid.sort('order');
+      // }
+    },
+    saveWebtileOrder() {
+      WebtilesHttpService.saveWebtileOrder(
+        this.webtiles.map(
+          (webtile) => {
+            const obj = {
+              id: webtile.id,
+              order: webtile.order,
+            };
+            return obj;
+          }
+        )
+      ).then((response) => {
+        this.setupWebtiles(response.data.webtiles);
+      });
     },
     navigate(url) {
       console.log(url);
@@ -172,12 +243,13 @@ export default {
       return false;
     },
     openAddModal() {
-      console.log('displayModal', this.displayModal);
+      console.log('displayAddModal', this.displayAddModal);
       this.modalHeader = 'Add Webtile';
-      this.displayModal = true;
+      this.displayAddModal = true;
     },
     closeAddModal() {
-      this.displayModal = false;
+      this.displayAddModal = false;
+      this.clearWebtileForm();
     },
     modalSaveHandler(data) {
       // if (this.validateForm()) {
@@ -223,6 +295,7 @@ export default {
       this.activateDeleteConfirmModal(webtile);
     },
     editWebtile(webtile) {
+      event.stopPropagation();      
       this.modalHeader = 'Edit Webtile';
       this.currentWebtile = webtileFactory.create(webtile);
       this.displayEditModal = true;
@@ -249,8 +322,28 @@ export default {
       console.log(this.currentWebtile);
     },
     modalEditCloseHandler() {
-      this.displayEditModal = false;
-      this.currentWebtile = {};
+      if(this.displayEditModal) {
+        console.log('edit modal closing');
+        this.displayEditModal = false;
+        this.currentWebtile = {};
+        this.clearWebtileForm();
+      }
+    },
+    clearWebtileForm() {
+      this.form = {
+        name: '',
+        url: '',
+        imageUrl: '',
+      };
+    },
+    setupWebtiles(webtiles) {
+      this.webtiles = webtiles
+                        .sort((a,b) => (a.order - b.order))
+                        .map(webtileFactory.create);
+        // wait until all UI elements are created before creating grid
+        this.$nextTick(() => {
+          this.renderWebtiles();
+        });
     },
   },
   created() {
@@ -259,13 +352,7 @@ export default {
   mounted() {
     WebtilesHttpService.getWebtiles()
       .then((response) => {
-        console.log(response);
-        this.webtiles = response.data.webtiles.map(webtileFactory.create);
-
-        // wait until all UI elements are created before creating grid
-        this.$nextTick(() => {
-          this.renderWebtiles();
-        });
+        this.setupWebtiles(response.data.webtiles);
       }, commonErrorHandler);
   },
 };

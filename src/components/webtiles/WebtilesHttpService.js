@@ -13,4 +13,9 @@ export default {
   deleteWebtile(webtile) {
     return HttpService.delete(`webtiles/${webtile.id}`);
   },
+  saveWebtileOrder(webtiles) {
+    return HttpService.put('webtiles', {
+      webtiles,
+    });
+  },
 };
