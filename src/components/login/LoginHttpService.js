@@ -1,5 +1,5 @@
-import HttpService from '../../core/services/http/HttpService';
-import store from '../../store';
+import HttpService from '@/core/services/http/HttpService';
+import store from '@/store';
 
 export default {
   signin(params) {

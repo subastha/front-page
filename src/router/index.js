@@ -2,6 +2,7 @@ import Router from 'vue-router';
 import Base from '@/components/base/Base';
 import Test from '@/components/test/Test';
 import Login from '@/components/login/Login';
+import Register from '@/components/register/Register';
 // import store from '@/store';
 
 const router = new Router({
@@ -34,6 +35,11 @@ const router = new Router({
       name: 'Login',
       component: Login,
     },
+    {
+      path: '/register',
+      name: 'Register',
+      component: Register,
+    },
   ],
 });
 
@@ -43,6 +49,7 @@ router.beforeEach((to, from, next) => {
     case 'Login':
     case 'Base':
     case 'Root':
+    case 'Register':
     case 'Test': next();
       break;
     default: router.push(Login);

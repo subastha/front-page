@@ -17,6 +17,7 @@
        <!-- <span class="md-error custom-md-error" v-if="showErrors && !$v.form.password.minLength">Password should be at least {{passwordMinLength}} characters long.</span> -->
       </md-field>
       <div class="login-button-container">
+        <md-button @click="register()" class="md-default md-raised" type="submit">Register</md-button>
         <md-button @click="login($event)" class="md-primary md-raised" type="submit">Login</md-button>
       </div>
       
@@ -70,7 +71,7 @@ export default {
     ]),
     login(event) {
       if (this.validateForm()) {
-        console.log('success', this.other, this.form, event);
+        // console.log('success', this.other, this.form, event);
         // LoginHttpService.info().then(info => console.log(info), commonErrorHandler);
         LoginHttpService.signin(this.form)
           .then((response) => {
@@ -92,6 +93,9 @@ export default {
       }
 
       return false;
+    },
+    register() {
+      this.$router.push('Register');
     },
   },
   beforeMount() {

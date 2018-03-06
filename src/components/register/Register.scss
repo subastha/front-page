@@ -1,0 +1,33 @@
+@import "../variables";
+
+.register-wrapper {
+  height: 100%;
+  width: 100%;
+}
+
+.register-container {
+  width: 100%;
+  height: 93%;
+  display:flex;
+  justify-content: center;
+
+  .register-form-container {
+    align-self: center;
+    width: 300px;
+
+    .register-button-container {
+      margin: 16px -8px 0 0;
+      float: right;
+    }
+
+    .custom-md-error {
+      opacity: 1;
+      bottom: -30px;
+      color: $errorColor;
+    }
+  }
+}
+
+.custom-md-field {
+  margin: 0;
+}
