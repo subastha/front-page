@@ -25,6 +25,18 @@
       bottom: -30px;
       color: $errorColor;
     }
+    .clearfix {
+      content: "";
+      display: table;
+      clear: both;
+    }
+  }
+
+  .link {
+    float: right;
+    font-size: 13px;
+    padding: 4px;
+    cursor: pointer;
   }
 }
 

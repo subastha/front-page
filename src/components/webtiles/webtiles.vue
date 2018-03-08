@@ -1,8 +1,7 @@
 <template>
 <div class="webtile-wrapper">
   <div id="grid-web-tile" class="grid grid-web-tile">
-    <div v-for="tile in webtiles"
-      @click="editMode ? function(){} : navigate(tile.url)"
+    <div v-for="tile in webtiles" @click="editMode ? function(){} : navigate(tile.url)"
       class="item-webtile"
       :class="{'move-pointer':editMode, 'link-pointer':!editMode}"
       :data-order="tile.order"

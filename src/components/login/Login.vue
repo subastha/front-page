@@ -16,10 +16,11 @@
         <span class="md-error custom-md-error" v-if="showErrors && !$v.form.password.required">Password is required.</span>
        <!-- <span class="md-error custom-md-error" v-if="showErrors && !$v.form.password.minLength">Password should be at least {{passwordMinLength}} characters long.</span> -->
       </md-field>
-      <div class="login-button-container">
+      <div class="login-button-container clearfix">
         <md-button @click="register()" class="md-default md-raised" type="submit">Register</md-button>
         <md-button @click="login($event)" class="md-primary md-raised" type="submit">Login</md-button>
       </div>
+      <div class="link"><a @click="forgotPassword($event)">Forgot Password</a></div>
       
     </form>
   </div>
@@ -96,6 +97,10 @@ export default {
     },
     register() {
       this.$router.push('Register');
+    },
+    forgotPassword(event) {
+      console.log(event);
+      this.$router.push('PwReset');
     },
   },
   beforeMount() {

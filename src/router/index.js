@@ -3,6 +3,7 @@ import Base from '@/components/base/Base';
 import Test from '@/components/test/Test';
 import Login from '@/components/login/Login';
 import Register from '@/components/register/Register';
+import PwReset from '@/components/pw_reset/PwReset';
 // import store from '@/store';
 
 const router = new Router({
@@ -40,16 +41,22 @@ const router = new Router({
       name: 'Register',
       component: Register,
     },
+    {
+      path: '/pwreset',
+      name: 'PwReset',
+      component: PwReset,
+    },
   ],
 });
 
 router.beforeEach((to, from, next) => {
-  // console.log('to from', to, from);
+  console.log('to from', to, from);
   switch (to.name) {
     case 'Login':
     case 'Base':
     case 'Root':
     case 'Register':
+    case 'PwReset':
     case 'Test': next();
       break;
     default: router.push(Login);
